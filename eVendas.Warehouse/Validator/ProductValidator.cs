@@ -41,7 +41,7 @@ namespace eVendas.Warehouse.Validator
                 .NotEmpty()
                 .WithMessage("Quantidade não pode ser deixado em branco.")
                 .Must(x => x >= 0)
-                .WithMessage("A quantidade deve informada deve ser maior ou igual a zero.");
+                .WithMessage("A quantidade informada deve ser maior ou igual a zero.");
 
             RuleFor(x => x)
                 .Must(x => !IsDuplicate(x))

@@ -45,7 +45,7 @@ namespace eVendas.Warehouse.Controller
             
             if (result.IsValid)
                 return Ok(_service.Create(_mapper.Map<ProductDto, Product>(productDto)));
-            return BadRequest(result.Errors.WithErrorMessage("Produto já cadastrado."));
+            return BadRequest(result.Errors);
         }
 
         [HttpPut("{id:int}")]

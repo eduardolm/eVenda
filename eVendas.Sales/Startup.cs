@@ -1,20 +1,19 @@
-using AutoMapper;
-using eVendas.Warehouse.Context;
-using eVendas.Warehouse.Dto;
-using eVendas.Warehouse.Interface;
-using eVendas.Warehouse.Model;
-using eVendas.Warehouse.Repository;
-using eVendas.Warehouse.Service;
-using eVendas.Warehouse.Validator;
-using FluentValidation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using eVendas.Sales.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace eVendas.Warehouse
+namespace eVendas.Sales
 {
     public class Startup
     {
@@ -38,16 +37,16 @@ namespace eVendas.Warehouse
                 .UseSqlServer($"Server=127.0.0.1,1433;Database=Warehouse;" +
                               $"User Id={_dbUser};Password={_dbPassword}"));
             
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddTransient<IValidator<Product>, ProductValidator>();
-            
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ProductDto, Product>();
-            });
-            IMapper mapper = config.CreateMapper();
-            services.AddSingleton(mapper);
+            // services.AddScoped<IProductRepository, ProductRepository>();
+            // services.AddScoped<IProductService, ProductService>();
+            // services.AddTransient<IValidator<Product>, ProductValidator>();
+            //
+            // var config = new MapperConfiguration(cfg =>
+            // {
+            //     cfg.CreateMap<ProductDto, Product>();
+            // });
+            // IMapper mapper = config.CreateMapper();
+            // services.AddSingleton(mapper);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
