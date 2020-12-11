@@ -7,8 +7,8 @@ namespace eVendas.Warehouse.Service
 {
     public class ProductService : GenericService<Product>, IProductService
     {
-        public ProductService(IGenericRepository<Product> repository, 
-            IValidator<Product> validator) : base(repository, validator)
+        public ProductService(IGenericRepository<Product> repository, IValidator<Product> validator) : 
+            base(repository, validator)
         {
         }
     }

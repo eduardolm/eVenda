@@ -5,7 +5,6 @@
     <UserSecretsId>69a9ad70-a148-4a1f-8036-55c1bb10772d</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Controller" />
     <Folder Include="Dto" />
   </ItemGroup>
   <ItemGroup>

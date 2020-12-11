@@ -1,7 +1,11 @@
 using eVendas.Warehouse.Interface;
+using eVendas.Warehouse.Model;
 using eVendas.Warehouse.Repository;
 using eVendas.Warehouse.Repository.GenericRepository;
+using eVendas.Warehouse.Service;
 using eVendas.Warehouse.Service.GenericService;
+using eVendas.Warehouse.Validator;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +39,8 @@ namespace eVendas.Warehouse
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddTransient<IValidator<Product>, ProductValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

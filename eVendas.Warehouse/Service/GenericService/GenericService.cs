@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Castle.Core.Internal;
 using eVendas.Warehouse.Interface;
 using FluentValidation;
@@ -23,9 +24,9 @@ namespace eVendas.Warehouse.Service.GenericService
 
         public T GetById(int id)
         {
-            if (_repository.ToString().IsNullOrEmpty() || id < 0)
-                return null;
-            return _repository.GetById(id);
+            if (id > 0 && _repository.GetById(id) != null)
+                return _repository.GetById(id);
+            return null;
         }
 
         public object Create(T entity)
@@ -42,10 +43,15 @@ namespace eVendas.Warehouse.Service.GenericService
 
         public object Update(int id, T entity)
         {
-            if (!entity.Id.ToString().IsNullOrEmpty() || entity.Id > 0 || _repository.GetById(entity.Id) != null)
+            if (id > 0 && _repository.GetById(entity.Id) != null)
             {
-                _repository.Update(entity);
-                return new {Message = "Product updated successfully."};
+                var result = _validator.Validate(entity);
+
+                if (result.IsValid)
+                {
+                    _repository.Update(entity);
+                    return new {Message = "Product updated successfully."};
+                }
             }
             return null;
         }

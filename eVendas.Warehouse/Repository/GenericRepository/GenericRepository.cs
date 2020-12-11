@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using eVendas.Warehouse.Context;
 using eVendas.Warehouse.Interface;
 using Microsoft.EntityFrameworkCore;
 
