@@ -20,7 +20,7 @@ namespace eVendas.Warehouse
 
                 try
                 {
-                    var context = services.GetRequiredService<DbContext>();
+                    var context = services.GetRequiredService<MainContext>();
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)

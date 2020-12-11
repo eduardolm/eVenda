@@ -1,3 +1,4 @@
+using eVendas.Warehouse.Context;
 using eVendas.Warehouse.Interface;
 using eVendas.Warehouse.Model;
 using eVendas.Warehouse.Repository;
@@ -32,8 +33,8 @@ namespace eVendas.Warehouse
             _dbPassword = Configuration["Connection:Password"];
             
             services.AddControllers();
-            services.AddDbContext<DbContext>(options => options
-                .UseSqlServer($"Server=127.0.0.1,1433;Database=SupplierList;" +
+            services.AddDbContext<MainContext>(options => options
+                .UseSqlServer($"Server=127.0.0.1,1433;Database=Warehouse;" +
                               $"User Id={_dbUser};Password={_dbPassword}"));
             
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
