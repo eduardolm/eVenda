@@ -8,7 +8,7 @@ namespace eVendas.Warehouse.Interface
     {
         IEnumerable<T> GetAll();
         T GetById(int id);
-        object Create(T entity);
+        object Create(T product);
         object Update(int id, T entity);
         object Delete(int id);
     }

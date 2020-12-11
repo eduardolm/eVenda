@@ -37,8 +37,7 @@ namespace eVendas.Warehouse.Migrations
                         .HasColumnName("nome");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(2)
-                        .HasColumnType("decimal(2)")
+                        .HasColumnType("decimal(6,2)")
                         .HasColumnName("preco");
 
                     b.Property<int>("Quantity")

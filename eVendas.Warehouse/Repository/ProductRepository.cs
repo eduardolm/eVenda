@@ -1,34 +1,72 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using eVendas.Warehouse.Context;
 using eVendas.Warehouse.Interface;
 using eVendas.Warehouse.Model;
-using eVendas.Warehouse.Repository.GenericRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace eVendas.Warehouse.Repository
 {
-    public class ProductRepository : GenericRepository<Product>, IProductRepository
+    public sealed class ProductRepository : IProductRepository
     {
-        private readonly MainContext _mainContext;
-        public ProductRepository(DbContext context, MainContext mainContext) : base(context)
+        private readonly MainContext _context;
+        public ProductRepository(MainContext context)
         {
-            _mainContext = mainContext;
+            _context = context;
         }
 
-        public new IEnumerable<Product> GetAll()
+        public IEnumerable<Product> GetAll()
         {
-            return from p in _mainContext.Products.ToList() 
+            return from p in _context.Products.ToList() 
                 where p.Quantity > 0 
                 select p;
         }
 
-        public new Product GetById(int id)
+        public Product GetById(int id)
         {
-            return (from p in _mainContext.Products.ToList()
+            return (from p in _context.Products.ToList()
                 where p.Id == id
                 where p.Quantity > 0
                 select p).FirstOrDefault();
+        }
+
+        public void Create(Product entity)
+        {
+            _context.Products.Add(entity);
+            _context.SaveChanges();
+        }
+
+        public void Update(Product entity)
+        {
+            DetachLocal(_ => _.Id == entity.Id);
+            _context.Products.Update(entity);
+            _context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var entity = _context.Products.FirstOrDefault(x => x.Id == id);
+            
+            if (entity != null)
+            {
+                _context.Remove(entity);
+                _context.SaveChanges();
+            }
+        }
+        
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
+
+        public void DetachLocal(Func<Product, bool> predicate)
+        {
+            var local = _context.Products.Local.Where(predicate).FirstOrDefault();
+            if (local != null)
+            {
+                _context.Entry(local).State = EntityState.Detached;
+            }
         }
     }
 }

@@ -51,7 +51,7 @@ namespace eVendas.Warehouse.Validator
         private bool IsDuplicate(Product product)
         {
             var compProduct = (from n in _context.Products.ToList() select n);
-            return compProduct.Any(x => x.Name == product.Name && x.Sku == product.Sku);
+            return compProduct.Any(x => x.Name == product.Name || x.Sku == product.Sku);
         }
     }
 }

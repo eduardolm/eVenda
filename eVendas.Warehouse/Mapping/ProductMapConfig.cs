@@ -24,9 +24,8 @@ namespace eVendas.Warehouse.Mapping
                 .IsRequired();
 
             builder.Property(x => x.Price)
-                .HasColumnType("decimal")
+                .HasColumnType("decimal(6, 2)")
                 .HasColumnName("preco")
-                .HasPrecision(2)
                 .IsRequired();
 
             builder.Property(x => x.Quantity)
