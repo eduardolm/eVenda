@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using eVendas.Warehouse.Interface;
+using eVendas.Sales.Interface;
 
-namespace eVendas.Warehouse.Service.GenericService
+namespace eVendas.Sales.Service.GenericService
 {
     public class GenericService<T> : IGenericService<T> where T : class, IBase
     {

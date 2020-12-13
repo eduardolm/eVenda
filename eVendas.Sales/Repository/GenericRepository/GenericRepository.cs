@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using eVendas.Warehouse.Context;
-using eVendas.Warehouse.Interface;
+using eVendas.Sales.Context;
+using eVendas.Sales.Interface;
 using Microsoft.EntityFrameworkCore;
 
-namespace eVendas.Warehouse.Repository.GenericRepository
+namespace eVendas.Sales.Repository.GenericRepository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class, IBase
     {

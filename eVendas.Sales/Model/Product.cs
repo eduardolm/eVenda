@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using eVendas.Warehouse.Interface;
+using eVendas.Sales.Interface;
 
-namespace eVendas.Warehouse.Model
+namespace eVendas.Sales.Model
 {
-    [Table("produtos")]
+    [Table("Produtos")]
     public class Product : IBase
     {
+        public int Id { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public int Id { get; set; }
+        
+        public virtual IList<ProductSale> ProductSales { get; set; }
     }
 }

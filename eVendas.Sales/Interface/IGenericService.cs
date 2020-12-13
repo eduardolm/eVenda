@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace eVendas.Warehouse.Interface
+namespace eVendas.Sales.Interface
 {
     public interface IGenericService<T> : IDisposable where T : class, IBase
     {

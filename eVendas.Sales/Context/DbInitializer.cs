@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace eVendas.Warehouse.Context
+namespace eVendas.Sales.Context
 {
     public class DbInitializer
     {
