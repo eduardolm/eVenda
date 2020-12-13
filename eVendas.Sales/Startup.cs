@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace eVendas.Sales
 {
@@ -32,9 +33,13 @@ namespace eVendas.Sales
             _dbPassword = Configuration["Connection:Password"];
 
             services.AddMvcCore(options => options.EnableEndpointRouting = false);
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
             services.AddDbContext<MainContext>(options => options
-                .UseSqlServer($"Server=127.0.0.1,1433;Database=Warehouse;" +
+                .UseSqlServer($"Server=127.0.0.1,1433;Database=Sales;" +
                               $"User Id={_dbUser};Password={_dbPassword}"));
             
             // services.AddScoped<IProductRepository, ProductRepository>();

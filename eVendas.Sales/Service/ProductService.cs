@@ -2,33 +2,41 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
-using eVendas.Warehouse.Interface;
-using eVendas.Warehouse.Model;
-using FluentValidation;
+using eVendas.Sales.Interface;
+using eVendas.Sales.Model;
 
-namespace eVendas.Warehouse.Service
+namespace eVendas.Sales.Service
 {
     public class ProductService :  IProductService
     {
         private readonly IProductRepository _repository;
-        private readonly IValidator<Product> _validator;
         
-        public ProductService(IProductRepository repository, IValidator<Product> validator)
+        public ProductService(IProductRepository repository)
         {
             _repository = repository;
-            _validator = validator;
         }
         
         public IEnumerable<Product> GetAll()
         {
-            return _repository.GetAll();
+            // TODO: Alterar response para devolver todos os produtos com estoque = 0 ou não
+            var response = (from p in  _repository.GetAll()
+                where p.Quantity > 0
+                select p);
+
+            return response;
         }
         
         public Product GetById(int id)
         {
             if (id > 0 &&  _repository.GetById(id) != null)
             {
-                return _repository.GetById(id);
+                // TODO: Alterar response para devolver todos os produtos com estoque = 0 ou não
+                var response = (from p in  _repository.GetAll()
+                    where p.Quantity > 0
+                    where p.Id.Equals(id)
+                    select p).FirstOrDefault();
+
+                return response;
             }
             return null;
         }
@@ -37,15 +45,8 @@ namespace eVendas.Warehouse.Service
         {
             product.CreatedAt = DateTime.Now;
             product.UpdatedAt = DateTime.Now;
-            
-            var result = _validator.Validate(product);
-            
-            if (result.IsValid)
-            {
-                 _repository.Create(product);
-                return new {Message = "Produto adicionado com sucesso."};
-            }
-            return null;
+            _repository.Create(product);
+            return new {Message = "Produto adicionado com sucesso."};
         }
 
         public object Update(int id, Product product)
