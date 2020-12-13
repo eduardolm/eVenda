@@ -1,8 +1,6 @@
-﻿using eVendas.Warehouse.Interface;
-
-namespace eVendas.Warehouse.Model
+﻿namespace eVendas.Warehouse.Model
 {
-    public class Base : IBase
+    public abstract class Base
     {
         public int Id { get; set; }
     }

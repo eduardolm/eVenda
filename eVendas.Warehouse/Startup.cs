@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace eVendas.Warehouse
 {
@@ -33,7 +34,12 @@ namespace eVendas.Warehouse
             _dbPassword = Configuration["Connection:Password"];
 
             services.AddMvcCore(options => options.EnableEndpointRouting = false);
-            services.AddControllers();
+
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
             services.AddDbContext<MainContext>(options => options
                 .UseSqlServer($"Server=127.0.0.1,1433;Database=Warehouse;" +
                               $"User Id={_dbUser};Password={_dbPassword}"));

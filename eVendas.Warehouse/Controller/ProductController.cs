@@ -3,7 +3,6 @@ using eVendas.Warehouse.Dto;
 using eVendas.Warehouse.Interface;
 using eVendas.Warehouse.Model;
 using FluentValidation;
-using FluentValidation.TestHelper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eVendas.Warehouse.Controller
@@ -54,7 +53,7 @@ namespace eVendas.Warehouse.Controller
             var result = _service.Update(id, _mapper.Map<ProductDto, Product>(productDto));
             
             if (result != null) return Ok(result);
-            return BadRequest(new {Message = "Ocorreu um erro ao tentar processar a sua solicitação. Verifique " +
+            return BadRequest(new {Message = "Ocorreu um erro ao processar a sua solicitação. Verifique " +
                                              "os dados informados."});
         }
 

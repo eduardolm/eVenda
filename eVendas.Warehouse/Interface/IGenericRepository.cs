@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace eVendas.Warehouse.Interface
 {
-    public interface IGenericRepository<T> : IDisposable where T : class, IBase
+    public interface IGenericRepository<T> where T : class, IBase
     {
         IEnumerable<T> GetAll();
         T GetById(int id);
-        void Create(T entity);
-        void Update(T entity);
-        void Delete(int id);
+        T Create(T entity);
+        T Update(T entity);
+        T Delete(int id);
+        void Dispose();
     }
 }
