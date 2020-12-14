@@ -4,7 +4,9 @@ using eVendas.Warehouse.Dto;
 using eVendas.Warehouse.Interface;
 using eVendas.Warehouse.Model;
 using eVendas.Warehouse.Repository;
+using eVendas.Warehouse.Repository.GenericRepository;
 using eVendas.Warehouse.Service;
+using eVendas.Warehouse.Service.GenericService;
 using eVendas.Warehouse.Validator;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
@@ -44,6 +46,8 @@ namespace eVendas.Warehouse
                 .UseSqlServer($"Server=127.0.0.1,1433;Database=Warehouse;" +
                               $"User Id={_dbUser};Password={_dbPassword}"));
             
+            services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddTransient<IValidator<Product>, ProductValidator>();
