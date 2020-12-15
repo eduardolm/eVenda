@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Runtime.InteropServices.ComTypes;
 using eVendas.Sales.Enum;
 using eVendas.Sales.Interface;
 using eVendas.Sales.Model;
 using eVendas.Sales.Service.GenericService;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace eVendas.Sales.Service
 {
@@ -12,13 +10,17 @@ namespace eVendas.Sales.Service
     {
         private readonly IGenericRepository<Sale> _repository;
         private readonly IProductSaleRepository _productSaleRepository;
+        private readonly IUpdateProduct _updateProduct;
         private readonly IMessageHandler _messageHandler;
 
-        public SaleService(IGenericRepository<Sale> repository, IMessageHandler messageHandler, IProductSaleRepository productSaleRepository) : base(repository)
+        public SaleService(
+            IGenericRepository<Sale> repository, IMessageHandler messageHandler, 
+            IProductSaleRepository productSaleRepository, IUpdateProduct updateProduct) : base(repository)
         {
             _repository = repository;
             _messageHandler = messageHandler;
             _productSaleRepository = productSaleRepository;
+            _updateProduct = updateProduct;
         }
 
         public new object Create(Sale sale)
@@ -27,15 +29,13 @@ namespace eVendas.Sales.Service
             sale.CreatedAt = DateTime.Now;
             sale.UpdatedAt = DateTime.Now;
             _repository.Create(sale);
+            _updateProduct.UpdateStock(sale);
             _messageHandler.SendMessageAsync(MessageType.SaleCreated, sale);
 
-            var productSale = new ProductSale();
-            productSale.ProductId = sale.ProductId;
-            productSale.SaleId = sale.Id;
+            var productSale = new ProductSale {ProductId = sale.ProductId, SaleId = sale.Id};
             _productSaleRepository.Create(productSale);
             
             return new {Message = "Venda efetuada com sucesso."};
-
         }
 
         public new object Update(int id, Sale sale)
@@ -54,10 +54,18 @@ namespace eVendas.Sales.Service
 
             _repository.Update(id, sale);
             _messageHandler.SendMessageAsync(MessageType.SaleUpdated, sale, updatedSale);
-            
-            var productSale = new ProductSale();
-            productSale.ProductId = sale.ProductId;
-            productSale.SaleId = sale.Id;
+
+            if (updatedSale.OldProductId != updatedSale.NewProductId)
+            {
+                _updateProduct.UpdateStock(sale, saleToUpdate);
+            }
+
+            if (updatedSale.OldQuantity > updatedSale.NewQuantity)
+            {
+                _updateProduct.UpdateStock(sale, saleToUpdate);
+            }
+
+            var productSale = new ProductSale {ProductId = sale.ProductId, SaleId = sale.Id};
             _productSaleRepository.Update(productSale.ProductId, productSale.SaleId, productSale);
             
             return new {Message = "Venda alterado com sucesso."};
@@ -76,9 +84,9 @@ namespace eVendas.Sales.Service
             productSale.ProductId = saleToDelete.ProductId;
             productSale.SaleId = saleToDelete.Id;
             _productSaleRepository.Delete(productSale.ProductId, productSale.SaleId);
+            _updateProduct.CancelSale(saleToDelete);
 
             return new {Message = "Venda cancelada com sucesso."};
-
         }
     }
 }

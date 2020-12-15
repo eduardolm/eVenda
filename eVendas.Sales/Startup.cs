@@ -56,6 +56,7 @@ namespace eVendas.Sales
             services.AddScoped<IProductSaleService, ProductSaleService>();
             services.AddScoped<IMessageHandler, MessageHandler>();
             services.AddScoped<IMessageFactory, MessageFactory>();
+            services.AddScoped<IUpdateProduct, UpdateProduct>();
             
             var config = new MapperConfiguration(cfg =>
             {
