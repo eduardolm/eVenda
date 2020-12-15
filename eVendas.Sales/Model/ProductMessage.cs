@@ -1,12 +1,10 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using eVendas.Warehouse.Interface;
 
-namespace eVendas.Warehouse.Model
+namespace eVendas.Sales.Model
 {
-    [Table("produtos")]
-    public class Product : Base, IBase
+    public class ProductMessage
     {
+        public int ProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }

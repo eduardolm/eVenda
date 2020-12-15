@@ -6,9 +6,20 @@ using eVendas.Sales.Interface;
 namespace eVendas.Sales.Model
 {
     [Table("Produtos")]
-    public class Product : IBase
+    public class Product : Base, IBase
     {
-        public int Id { get; set; }
+        public Product() {}
+
+        public Product(int id, string sku, string name, decimal price, int quantity, DateTime createdAt, DateTime updatedAt)
+        {
+            Id = id;
+            Sku = sku;
+            Name = name;
+            Price = price;
+            Quantity = quantity;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+        }
         public string Sku { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }

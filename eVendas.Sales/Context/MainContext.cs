@@ -24,6 +24,10 @@ namespace eVendas.Sales.Context
         {
             modelBuilder.ApplyConfiguration(new ProductMapConfig());
 
+            modelBuilder.Entity<Product>()
+                .Property(x => x.Id)
+                .ValueGeneratedNever();
+            
             modelBuilder.Entity<Sale>()
                 .Property(x => x.Total)
                 .HasColumnType("decimal(6,2");

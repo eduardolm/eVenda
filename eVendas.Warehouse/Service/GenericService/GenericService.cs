@@ -8,12 +8,10 @@ namespace eVendas.Warehouse.Service.GenericService
     public class GenericService<T> : IGenericService<T> where T : Base
     {
         private readonly IGenericRepository<T> _repository;
-        private readonly IValidator<T> _validator;
 
-        public GenericService(IGenericRepository<T> repository, IValidator<T> validator)
+        public GenericService(IGenericRepository<T> repository)
         {
             _repository = repository;
-            _validator = validator;
         }
 
         public IEnumerable<T> GetAll()
@@ -28,15 +26,8 @@ namespace eVendas.Warehouse.Service.GenericService
 
         public object Create(T entity)
         {
-            var result = _validator.Validate(entity);
-
-            if (result.IsValid)
-            {
-                _repository.Create(entity);
-                return new {Message = "Produto cadastrado com sucesso."};
-            }
-
-            return new {Message = "Ocorreu um erro ao processar sua solicitação. Verifique os dados inseridos."};
+            _repository.Create(entity);
+            return new {Message = "Produto cadastrado com sucesso."};
         }
 
         public object Update(int id, T entity)
@@ -54,6 +45,7 @@ namespace eVendas.Warehouse.Service.GenericService
         {
             if (id > 0 && _repository.GetById(id) != null)
             {
+                var product = _repository.GetById(id);
                 _repository.Delete(id);
                 return new {Message = "Produto removido com sucesso."};
             }

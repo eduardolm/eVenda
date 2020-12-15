@@ -6,5 +6,6 @@ namespace eVendas.Warehouse.Interface
     {
         new object Create(Product product);
         new object Update(int id, Product product);
+        new object Delete(int id);
     }
 }

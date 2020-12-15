@@ -6,9 +6,8 @@ using eVendas.Sales.Interface;
 namespace eVendas.Sales.Model
 {
     [Table("Vendas")]
-    public class Sale : IBase
+    public class Sale : Base, IBase
     {
-        public int Id { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public decimal Total { get; set; }

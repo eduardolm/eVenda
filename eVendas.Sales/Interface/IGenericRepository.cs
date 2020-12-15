@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace eVendas.Sales.Interface
 {
-    public interface IGenericRepository<T> where T : class, IBase
+    public interface IGenericRepository<T> : IDisposable where T : class
     {
         IEnumerable<T> GetAll();
         T GetById(int id);
-        T Create(T entity);
-        T Update(T entity);
-        T Delete(int id);
-        void Dispose();
+        void Create(T entity);
+        void Update(int id, T entity);
+        void Delete(int id);
     }
 }

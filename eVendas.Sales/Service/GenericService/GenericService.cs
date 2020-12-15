@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using eVendas.Sales.Interface;
+using eVendas.Sales.Model;
+using FluentValidation;
 
 namespace eVendas.Sales.Service.GenericService
 {
-    public class GenericService<T> : IGenericService<T> where T : class, IBase
+    public class GenericService<T> : IGenericService<T> where T : Base
     {
         private readonly IGenericRepository<T> _repository;
 
@@ -24,17 +26,30 @@ namespace eVendas.Sales.Service.GenericService
 
         public object Create(T entity)
         {
-            return  _repository.Create(entity);
+            _repository.Create(entity);
+            return new {Message = "Produto cadastrado com sucesso."};
         }
 
         public object Update(int id, T entity)
         {
-            return _repository.Update(entity);
+            if (id > 0 && _repository.GetById(id) != null)
+            {
+                _repository.Update(id, entity);
+                return new {Message = "Produto alterado com sucesso."};
+            }
+
+            return new {Message = "Produto não encontrado."};
         }
 
         public object Delete(int id)
         {
-            return  _repository.Delete(id);
+            if (id > 0 && _repository.GetById(id) != null)
+            {
+                _repository.Delete(id);
+                return new {Message = "Produto removido com sucesso."};
+            }
+
+            return new {Message = "Produto não encontrado."};
         }
         
         public void Dispose()

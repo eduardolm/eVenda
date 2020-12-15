@@ -51,7 +51,10 @@ namespace eVendas.Warehouse.Repository.GenericRepository
 
             if (entity != null)
 
+            {
                 _dbSet.Remove(entity);
+                _context.SaveChanges();
+            }
         }
         
         public void Dispose()

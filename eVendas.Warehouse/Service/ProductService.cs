@@ -1,4 +1,5 @@
 ﻿using System;
+using eVendas.Warehouse.Enum;
 using eVendas.Warehouse.Interface;
 using eVendas.Warehouse.Model;
 using eVendas.Warehouse.Service.GenericService;
@@ -8,15 +9,14 @@ namespace eVendas.Warehouse.Service
 {
     public class ProductService : GenericService<Product>, IProductService
     {
-        private readonly IValidator<Product> _validator;
         private readonly IGenericRepository<Product> _productRepository;
+        private readonly IMessageHandler _messageHandler;
         
         public ProductService(
-            IGenericRepository<Product> repository, 
-            IValidator<Product> validator) : base(repository, validator)
+            IGenericRepository<Product> repository, IMessageHandler messageHandler) : base(repository)
         {
-            _validator = validator;
             _productRepository = repository;
+            _messageHandler = messageHandler;
         }
 
         public new object Create(Product product)
@@ -24,18 +24,9 @@ namespace eVendas.Warehouse.Service
             product.CreatedAt = DateTime.Now;
             product.UpdatedAt = DateTime.Now;
 
-            var result = _validator.Validate(product);
-
-            if (result.IsValid)
-            {
-                _productRepository.Create(product);
-                return new {Message = "Produto cadastrado com sucesso."};
-            }
-
-            return new
-            {
-                Message = "Ocorreu um erro ao cadastrar o produto. Verifique os dados informados e tente novamente."
-            };
+            _productRepository.Create(product);
+            _messageHandler.SendMessageAsync(MessageType.ProductCreated, product);
+            return new {Message = "Produto cadastrado com sucesso."};
         }
 
         public new object Update(int id, Product product)
@@ -51,10 +42,24 @@ namespace eVendas.Warehouse.Service
                     product.Id = id;
                     
                     _productRepository.Update(id, product);
+                    _messageHandler.SendMessageAsync(MessageType.ProductUpdated, product);
                     return new {Message = "Produto alterado com sucesso."};
                 }
             }
 
+            return new {Message = "Produto não encontrado."};
+        }
+        
+        public new object Delete(int id)
+        {
+            if (id > 0 && _productRepository.GetById(id) != null)
+            {
+                var product = _productRepository.GetById(id);
+                _productRepository.Delete(id);
+                _messageHandler.SendMessageAsync(MessageType.ProductDeleted, product);
+                return new {Message = "Produto removido com sucesso."};
+            }
+        
             return new {Message = "Produto não encontrado."};
         }
     }
