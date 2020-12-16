@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace eVendas.Sales.Helper
+namespace eVendas.Warehouse.Helper
 {
     public static class Utilities
     {

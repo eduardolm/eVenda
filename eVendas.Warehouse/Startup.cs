@@ -37,6 +37,7 @@ namespace eVendas.Warehouse
             _dbUser = Configuration["Connection:User"];
             _dbPassword = Configuration["Connection:Password"];
 
+            services.AddHostedService<BusListener>();
             services.AddMvcCore(options => options.EnableEndpointRouting = false);
 
             services.AddControllers()
@@ -56,6 +57,7 @@ namespace eVendas.Warehouse
             services.AddTransient<IValidator<Product>, ProductValidator>();
             services.AddScoped<IMessageFactory, MessageFactory>();
             services.AddScoped<IMessageHandler, MessageHandler>();
+            services.AddScoped<IUpdateProduct, UpdateProduct>();
             
             var config = new MapperConfiguration(cfg =>
             {

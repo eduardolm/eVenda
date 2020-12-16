@@ -12,35 +12,47 @@ namespace eVendas.Sales.Service
         private readonly IProductSaleRepository _productSaleRepository;
         private readonly IUpdateProduct _updateProduct;
         private readonly IMessageHandler _messageHandler;
+        private readonly IProductRepository _productRepository;
 
         public SaleService(
             IGenericRepository<Sale> repository, IMessageHandler messageHandler, 
-            IProductSaleRepository productSaleRepository, IUpdateProduct updateProduct) : base(repository)
+            IProductSaleRepository productSaleRepository, IUpdateProduct updateProduct,
+            IProductRepository productRepository) : base(repository)
         {
             _repository = repository;
             _messageHandler = messageHandler;
             _productSaleRepository = productSaleRepository;
             _updateProduct = updateProduct;
+            _productRepository = productRepository;
         }
 
         public new object Create(Sale sale)
         {
-            if (sale == null) return null;
-            sale.CreatedAt = DateTime.Now;
-            sale.UpdatedAt = DateTime.Now;
-            _repository.Create(sale);
-            _updateProduct.UpdateStock(sale);
-            _messageHandler.SendMessageAsync(MessageType.SaleCreated, sale);
+            var product = _productRepository.GetById(sale.ProductId);
 
-            var productSale = new ProductSale {ProductId = sale.ProductId, SaleId = sale.Id};
-            _productSaleRepository.Create(productSale);
+            if (sale.Quantity <= product.Quantity)
+            {
+                if (sale.Equals(null)) return null;
+                sale.CreatedAt = DateTime.Now;
+                sale.UpdatedAt = DateTime.Now;
+                _repository.Create(sale);
+                _updateProduct.UpdateStock(sale);
+                _messageHandler.SendMessageAsync(MessageType.SaleCreated, sale);
+
+                var productSale = new ProductSale {ProductId = sale.ProductId, SaleId = sale.Id};
+                _productSaleRepository.Create(productSale);
             
-            return new {Message = "Venda efetuada com sucesso."};
+                return new {Message = "Venda efetuada com sucesso."};
+            }
+
+            return null;
         }
 
         public new object Update(int id, Sale sale)
         {
             if (id <= 0 || _repository.GetById(id) == null) return null;
+
+            var product = _productRepository.GetById(sale.ProductId);
             var saleToUpdate = _repository.GetById(id);
             var updatedSale = new UpdatedSale(
                 saleToUpdate.ProductId, 
@@ -64,11 +76,17 @@ namespace eVendas.Sales.Service
             {
                 _updateProduct.UpdateStock(sale, saleToUpdate);
             }
+            
+            if (updatedSale.OldQuantity < updatedSale.NewQuantity)
+            {
+                if (updatedSale.NewQuantity > product.Quantity) return null;
+                _updateProduct.UpdateStock(sale, saleToUpdate);
+            }
 
             var productSale = new ProductSale {ProductId = sale.ProductId, SaleId = sale.Id};
             _productSaleRepository.Update(productSale.ProductId, productSale.SaleId, productSale);
             
-            return new {Message = "Venda alterado com sucesso."};
+            return new {Message = "Venda alterada com sucesso."};
         }
 
         public new object Delete(int id)

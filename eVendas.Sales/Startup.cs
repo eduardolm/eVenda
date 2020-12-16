@@ -35,6 +35,7 @@ namespace eVendas.Sales
             _dbUser = Configuration["Connection:User"];
             _dbPassword = Configuration["Connection:Password"];
 
+            services.AddHostedService<BusListener>();
             services.AddMvcCore(options => options.EnableEndpointRouting = false);
             services.AddControllers()
                 .AddNewtonsoftJson(options =>

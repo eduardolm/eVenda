@@ -9,7 +9,5 @@ namespace eVendas.Sales.Interface
     public interface IMessageHandler
     {
         Task SendMessageAsync(MessageType messageType, Sale sale, UpdatedSale updatedSale=null);
-        Task ReceiveMessageAsync();
-        Task ProcessMessageAsync(Message message, CancellationToken arg2);
     }
 }

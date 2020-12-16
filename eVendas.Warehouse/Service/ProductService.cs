@@ -3,7 +3,6 @@ using eVendas.Warehouse.Enum;
 using eVendas.Warehouse.Interface;
 using eVendas.Warehouse.Model;
 using eVendas.Warehouse.Service.GenericService;
-using FluentValidation;
 
 namespace eVendas.Warehouse.Service
 {
