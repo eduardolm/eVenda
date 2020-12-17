@@ -58,9 +58,7 @@ namespace eVendas.Warehouse.Helper
 
         public Task ProcessMessageAsync(Message message, CancellationToken arg2)
         {
-            Console.WriteLine(message.Body.ToString());
             var receivedMessage = message.Body.ParseJson<SaleInputMessage>();
-            Console.WriteLine(receivedMessage);
             var sale = new Sale(receivedMessage.SaleId, receivedMessage.ProductId, receivedMessage.Quantity, 
                 receivedMessage.CreatedAt, receivedMessage.UpdatedAt);
             

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using eVendas.Sales.Interface;
 using eVendas.Sales.Model;
 
@@ -15,21 +16,19 @@ namespace eVendas.Sales.Helper
         
         public void UpdateStock(Sale newSale, Sale oldSale=null)
         {
-            var quantity = 0;
-            if (oldSale != null) quantity = oldSale.Quantity;
-            
             var product = _productService.GetById(newSale.ProductId);
-
-            if (newSale.Quantity > quantity)
+            product.UpdatedAt = DateTime.Now;
+            
+            if (oldSale != null)
             {
-                product.Quantity -= (newSale.Quantity - quantity);
-                _productService.Update(newSale.ProductId, product);
-            }
-
-            if (newSale.Quantity < quantity)
-            {
-                product.Quantity += (quantity - newSale.Quantity);
-                _productService.Update(newSale.ProductId, product);
+                if (newSale.Quantity != oldSale.Quantity)
+                {
+                    product.Quantity += oldSale.Quantity;
+                    _productService.Update(product.Id, product);
+                    product.Quantity -= newSale.Quantity;
+                    _productService.Update(product.Id, product);
+                }
+ 
             }
         }
 

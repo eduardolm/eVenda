@@ -25,13 +25,6 @@ namespace eVendas.Warehouse.Helper
                 }
                 case "SaleUpdated":
                 {
-                    if (receivedMessage.UpdatedSale.OldProductId != receivedMessage.UpdatedSale.NewProductId)
-                    {
-                        product.Quantity += receivedMessage.UpdatedSale.OldQuantity;
-                        _productService.Update(product.Id, product);
-                        break;
-                    }
-
                     if (receivedMessage.UpdatedSale.OldQuantity != receivedMessage.UpdatedSale.NewQuantity)
                     {
                         product.Quantity += receivedMessage.UpdatedSale.OldQuantity;

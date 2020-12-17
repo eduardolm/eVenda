@@ -35,6 +35,7 @@ namespace eVendas.Sales.Service
             if (sale.Equals(null)) return null;
             sale.CreatedAt = DateTime.Now;
             sale.UpdatedAt = DateTime.Now;
+            sale.Total = product.Price * sale.Quantity;
             _repository.Create(sale);
             _updateProduct.UpdateStock(sale);
             await _messageHandler.SendMessageAsync(MessageType.SaleCreated, sale);
@@ -44,7 +45,7 @@ namespace eVendas.Sales.Service
 
         public new async Task<object> Update(int id, Sale sale)
         {
-            if (id <= 0 || _repository.GetById(id) == null) return null;
+            if (id <= 0 || _repository.GetById(id) == null) return new {Message = "Produto não encontrado."};
 
             var product = _productRepository.GetById(sale.ProductId);
             var saleToUpdate = _repository.GetById(id);
@@ -56,38 +57,35 @@ namespace eVendas.Sales.Service
             
             sale.CreatedAt = saleToUpdate.CreatedAt;
             sale.UpdatedAt = DateTime.Now;
+            sale.Total = product.Price * sale.Quantity;
             sale.Id = id;
-
+            
+            if (updatedSale.NewProductId != updatedSale.OldProductId)
+                return new
+                {
+                    Message = "Não é possível alterar " +
+                              "o produto vendido. É preciso cancelar a venda e criar uma nova venda."
+                };
+            
             _repository.Update(id, sale);
             await _messageHandler.SendMessageAsync(MessageType.SaleUpdated, sale, updatedSale);
-
-            if (updatedSale.OldProductId != updatedSale.NewProductId)
-            {
-                _updateProduct.UpdateStock(sale, saleToUpdate);
-            }
-
-            if (updatedSale.OldQuantity > updatedSale.NewQuantity)
-            {
-                _updateProduct.UpdateStock(sale, saleToUpdate);
-            }
-            
-            if (updatedSale.OldQuantity < updatedSale.NewQuantity)
-            {
-                if (updatedSale.NewQuantity > product.Quantity) return null;
-                _updateProduct.UpdateStock(sale, saleToUpdate);
-            }
+            _updateProduct.UpdateStock(sale, saleToUpdate);
 
             return new {Message = "Venda alterada com sucesso."};
         }
 
         public new async Task<object> Delete(int id)
         {
-            if (id <= 0 || _repository.GetById(id) == null) return null;
+            if (id <= 0 || _repository.GetById(id) == null) return new {Message = "Venda não encontrada"};
             var saleToDelete = _repository.GetById(id);
+            var updatedSale = new UpdatedSale(
+                saleToDelete.ProductId, 
+                saleToDelete.ProductId, 
+                saleToDelete.Quantity, 
+                0);
             
-            if (saleToDelete == null) return null;
             _repository.Delete(id);
-            await _messageHandler.SendMessageAsync(MessageType.SaleCancelled, saleToDelete);
+            await _messageHandler.SendMessageAsync(MessageType.SaleCancelled, saleToDelete, updatedSale);
             _updateProduct.CancelSale(saleToDelete);
 
             return new {Message = "Venda cancelada com sucesso."};

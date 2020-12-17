@@ -21,11 +21,6 @@ namespace eVendas.Sales.Helper
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
         
-        /// <summary>
-        /// Converts the object to json bytes.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <returns></returns>
         public static byte[] ToJsonBytes(this object source)
         {
             if (source == null)
@@ -34,12 +29,6 @@ namespace eVendas.Sales.Helper
             return Utf8NoBom.GetBytes(instring);
         }
         
-        /// <summary>
-        /// Parses a Utf8 byte json to a specific object.
-        /// </summary>
-        /// <typeparam name="T">type of object to be parsed.</typeparam>
-        /// <param name="json">The json bytes.</param>
-        /// <returns>the object parsed from json.</returns>
         public static T ParseJson<T>(this byte[] json)
         {
             if (json == null || json.Length == 0) return default;
