@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eVendas.Warehouse", "eVenda
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eVendas.Sales", "eVendas.Sales\eVendas.Sales.csproj", "{9E22E612-D2AA-49EC-9362-4FCE7AACBEE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eVendas.SaleTest", "eVendas.SaleTest\eVendas.SaleTest.csproj", "{25E82950-46B7-4552-A0F0-79367C49BABF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{9E22E612-D2AA-49EC-9362-4FCE7AACBEE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E22E612-D2AA-49EC-9362-4FCE7AACBEE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E22E612-D2AA-49EC-9362-4FCE7AACBEE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25E82950-46B7-4552-A0F0-79367C49BABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25E82950-46B7-4552-A0F0-79367C49BABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25E82950-46B7-4552-A0F0-79367C49BABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25E82950-46B7-4552-A0F0-79367C49BABF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

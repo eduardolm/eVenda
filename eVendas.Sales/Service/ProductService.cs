@@ -62,7 +62,7 @@ namespace eVendas.Sales.Service
                     return new {Message = "Produto alterado com sucesso."};
                 }
             }
-            return null;
+            return new {Message = "Produto não encontrado."};
         }
     }
 }
