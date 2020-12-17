@@ -4,6 +4,5 @@ namespace eVendas.Sales.Interface
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
-        
     }
 }
