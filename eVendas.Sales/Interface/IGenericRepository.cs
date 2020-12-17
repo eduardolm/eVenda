@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace eVendas.Sales.Interface
 {
-    public interface IGenericRepository<T> : IDisposable where T : class
+    public interface IGenericRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
         T GetById(int id);

@@ -18,33 +18,15 @@ namespace eVendas.Sales.Context
         
         public DbSet<Product> Products { get; set; }
         public DbSet<Sale> Sales { get; set; }
-        public DbSet<ProductSale> ProductSales { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProductMapConfig());
-
-            modelBuilder.Entity<Product>()
-                .Property(x => x.Id)
-                .ValueGeneratedNever();
             
             modelBuilder.Entity<Sale>()
                 .Property(x => x.Total)
                 .HasColumnType("decimal(6,2");
 
-            modelBuilder.Entity<ProductSale>()
-                .HasKey(x => new {x.ProductId, x.SaleId});
-            
-            modelBuilder.Entity<ProductSale>()
-                .HasOne(ps => ps.Product)
-                .WithMany(s => s.ProductSales)
-                .HasForeignKey(ps => ps.ProductId);
-            
-            modelBuilder.Entity<ProductSale>()
-                .HasOne(ps => ps.Sale)
-                .WithMany(s => s.ProductSales)
-                .HasForeignKey(ps => ps.SaleId);
-            
             base.OnModelCreating(modelBuilder);
         }
         

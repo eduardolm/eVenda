@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using eVendas.Sales.Context;
 using eVendas.Sales.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -20,18 +21,18 @@ namespace eVendas.Sales.Repository.GenericRepository
 
         public IEnumerable<T> GetAll()
         {
-            return _dbSet.ToList();
+            return  _dbSet.ToList();
         }
 
         public T GetById(int id)
         {
-            return  _dbSet.Find(id);
+            return _dbSet.Find(id);
         }
 
         public void Create(T entity)
         {
-            _dbSet.Add(entity);
-            _context.SaveChanges();
+             _dbSet.Add(entity);
+             _context.SaveChanges();
         }
 
         public void Update(int id, T entity)
@@ -56,11 +57,11 @@ namespace eVendas.Sales.Repository.GenericRepository
             }
         }
         
-        public void Dispose()
-        {
-            _context.Dispose();
-        }
-        
+        // public void Dispose()
+        // {
+        //     _context.Dispose();
+        // }
+        //
         public virtual void DetachLocal(Func<T, bool> predicate)
         {
             var local = _context.Set<T>().Local.Where(predicate).FirstOrDefault();

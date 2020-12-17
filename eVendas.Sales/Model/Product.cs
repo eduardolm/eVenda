@@ -10,9 +10,8 @@ namespace eVendas.Sales.Model
     {
         public Product() {}
 
-        public Product(int id, string sku, string name, decimal price, int quantity, DateTime createdAt, DateTime updatedAt)
+        public Product(string sku, string name, decimal price, int quantity, DateTime createdAt, DateTime updatedAt)
         {
-            Id = id;
             Sku = sku;
             Name = name;
             Price = price;
@@ -26,7 +25,5 @@ namespace eVendas.Sales.Model
         public int Quantity { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        
-        public virtual IList<ProductSale> ProductSales { get; set; }
     }
 }

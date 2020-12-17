@@ -14,6 +14,10 @@ namespace eVendas.Sales.Model.MessageFactoryModel
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
+        public WarehouseInputMessage()
+        {
+        }
+
         public WarehouseInputMessage(MessageType messageType, Product product)
         {
             MessageTitle = messageType.ToString();

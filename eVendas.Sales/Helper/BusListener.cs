@@ -31,7 +31,7 @@ namespace eVendas.Sales.Helper
                 _productService = scope.ServiceProvider.GetService<IProductService>();
                 
                 _logger.LogDebug($"BusListener starting; Registering message handler.");
-                _subscriptionClient = new SubscriptionClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=ListenOnly;SharedAccessKey=d4ggwX0BK5c9zrS1yEWduJF/ac560r4SFw5so9551k8=", "vendarealizada", "VendaRealizadaEstoque");
+                _subscriptionClient = new SubscriptionClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=SaleReceiveOnly;SharedAccessKey=h1pA6PHiq5Vs+F9peE0YQ6dlTdAiznFgw2XAqrirzxs=", "stock-send", "Stock_Message");
             
                 var messageHandlerOptions = new MessageHandlerOptions(e => {
                     ProcessError(e.Exception);
@@ -50,34 +50,37 @@ namespace eVendas.Sales.Helper
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"BusListenerService stopping.");
+            _logger.LogDebug($"BusListener stopping.");
             await _subscriptionClient.CloseAsync();
         }
 
         private Task ProcessMessageAsync(Message message, CancellationToken arg2)
         {
             var receivedMessage = message.Body.ParseJson<WarehouseInputMessage>();
-            var product = new Product(receivedMessage.ProductId, receivedMessage.Sku, receivedMessage.Name, 
+            var product = new Product(receivedMessage.Sku, receivedMessage.Name, 
                 receivedMessage.Price, receivedMessage.Quantity, receivedMessage.CreatedAt, receivedMessage.UpdatedAt);
 
-            switch (receivedMessage.MessageTitle)
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                case "ProductCreated":
-                    _productService.Create(product);
-                    break;
-                case "ProductUpdated":
-                    _productService.Update(receivedMessage.ProductId, product);
-                    break;
-                case "ProductDeleted":
-                    _productService.Delete(receivedMessage.ProductId);
-                    break;
+                _productService = scope.ServiceProvider.GetService<IProductService>();
+                switch (receivedMessage.MessageTitle)
+                {
+                    case "ProductCreated":
+                        _productService.Create(product);
+                        break;
+                    case "ProductUpdated":
+                        _productService.Update(receivedMessage.ProductId, product);
+                        break;
+                    case "ProductDeleted":
+                        _productService.Delete(receivedMessage.ProductId);
+                        break;
+                }
+                return Task.CompletedTask;
             }
-
-            return Task.CompletedTask;
         }
 
         private void ProcessError(Exception e) {
-            _logger.LogError(e, "Error while processing messages item in BusListenerService.");
+            _logger.LogError(e, "Error while processing messages item in BusListener.");
         }
     }
 }

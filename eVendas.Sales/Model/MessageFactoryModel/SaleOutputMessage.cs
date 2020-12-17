@@ -5,13 +5,13 @@ namespace eVendas.Sales.Model.MessageFactoryModel
 {
     public class SaleOutputMessage
     {
-        private string MessageTitle { get; set; }
-        private int SaleId { get; set; }
-        private int ProductId { get; set; }
-        private int Quantity { get; set; }
-        private DateTime CreatedAt { get; set; }
-        private DateTime UpdatedAt { get; set; }
-        private UpdatedSale UpdatedSale { get; set; }
+        public string MessageTitle { get; set; }
+        public int SaleId { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public UpdatedSale UpdatedSale { get; set; }
 
         public SaleOutputMessage(MessageType messageType, Sale sale, UpdatedSale updatedSale=null)
         {

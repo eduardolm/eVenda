@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using eVendas.Sales.Interface;
 using eVendas.Sales.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -35,15 +36,15 @@ namespace eVendas.Sales.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Sale sale)
+        public async Task<IActionResult> Create([FromBody] Sale sale)
         {
-            return Ok(_service.Create(sale));
+            return Ok(await _service.Create(sale));
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult Update(int id, [FromBody] Sale sale)
+        public async Task<IActionResult> Update(int id, [FromBody] Sale sale)
         {
-            var result = _service.Update(id, sale);
+            var result = await _service.Update(id, sale);
             
             if (result != null) return Ok(result);
             return BadRequest(new {Message = "Ocorreu um erro ao processar a sua solicitação. Verifique " +
@@ -51,9 +52,9 @@ namespace eVendas.Sales.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return Ok(_service.Delete(id));
+            return Ok(await _service.Delete(id));
         }
     }
 }

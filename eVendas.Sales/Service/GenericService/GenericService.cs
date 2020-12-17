@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using eVendas.Sales.Interface;
 using eVendas.Sales.Model;
 using FluentValidation;
@@ -52,9 +53,9 @@ namespace eVendas.Sales.Service.GenericService
             return new {Message = "Produto não encontrado."};
         }
         
-        public void Dispose()
-        {
-            _repository.Dispose();
-        }
+        // public void Dispose()
+        // {
+        //     _repository.Dispose();
+        // }
     }
 }

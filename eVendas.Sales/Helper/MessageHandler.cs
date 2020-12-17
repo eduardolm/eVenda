@@ -10,7 +10,6 @@ namespace eVendas.Sales.Helper
     public class MessageHandler : IMessageHandler
     {
         private readonly IMessageFactory _factory;
-
         public MessageHandler(IMessageFactory factory)
         {
             _factory = factory;
@@ -19,7 +18,7 @@ namespace eVendas.Sales.Helper
         {
             var messageToSend = _factory.Create(messageType, sale, updatedSale);
 
-            var serviceBusClient = new TopicClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=SendOnly;SharedAccessKey=SQvgDluEkyote1s6huIX+J/kUv7XdgiE6PFrmMF+5Ik=", "vendarealizada");
+            var serviceBusClient = new TopicClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=SaleSendOnly;SharedAccessKey=aIZOcth6RYP+7l4oasASMh7zyqmRVbw1vlgwT5DELr0=", "sale-send");
 
             var message = new Message(messageToSend.ToJsonBytes());
             message.ContentType = "application/json";

@@ -53,8 +53,6 @@ namespace eVendas.Sales
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ISaleRepository, SaleRepository>();
             services.AddScoped<ISaleService, SaleService>();
-            services.AddScoped<IProductSaleRepository, ProductSaleRepository>();
-            services.AddScoped<IProductSaleService, ProductSaleService>();
             services.AddScoped<IMessageHandler, MessageHandler>();
             services.AddScoped<IMessageFactory, MessageFactory>();
             services.AddScoped<IUpdateProduct, UpdateProduct>();

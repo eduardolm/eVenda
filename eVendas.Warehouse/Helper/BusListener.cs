@@ -33,7 +33,7 @@ namespace eVendas.Warehouse.Helper
                 _updateProduct = scope.ServiceProvider.GetService<IUpdateProduct>();
                 
                 _logger.LogDebug($"BusListener starting; Registering message handler.");
-                _subscriptionClient = new SubscriptionClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=ListenOnly;SharedAccessKey=d4ggwX0BK5c9zrS1yEWduJF/ac560r4SFw5so9551k8=", "vendarealizada", "VendaRealizadaEstoque");
+                _subscriptionClient = new SubscriptionClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=StockReceiveOnly;SharedAccessKey=WxUBzyLeZCmEMih9p58QgH4FSXjVeOgRV1VVjuGvGZk=", "sale-send", "Sale-Message");
             
                 var messageHandlerOptions = new MessageHandlerOptions(e => {
                     ProcessError(e.Exception);
@@ -58,15 +58,21 @@ namespace eVendas.Warehouse.Helper
 
         public Task ProcessMessageAsync(Message message, CancellationToken arg2)
         {
+            Console.WriteLine(message.Body.ToString());
             var receivedMessage = message.Body.ParseJson<SaleInputMessage>();
+            Console.WriteLine(receivedMessage);
             var sale = new Sale(receivedMessage.SaleId, receivedMessage.ProductId, receivedMessage.Quantity, 
                 receivedMessage.CreatedAt, receivedMessage.UpdatedAt);
             
-            var product = _productService.GetById(receivedMessage.ProductId);
-        
-            _updateProduct.UpdateItem(product, sale, receivedMessage);
-        
-            return Task.CompletedTask;
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                _productService = scope.ServiceProvider.GetService<IProductService>();
+                _updateProduct = scope.ServiceProvider.GetService<IUpdateProduct>();
+                var product = _productService.GetById(receivedMessage.ProductId);
+                _updateProduct.UpdateItem(product, sale, receivedMessage);
+
+                return Task.CompletedTask;
+            }
         }
 
         private void ProcessError(Exception e) {

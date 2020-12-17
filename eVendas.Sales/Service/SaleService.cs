@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using eVendas.Sales.Enum;
 using eVendas.Sales.Interface;
 using eVendas.Sales.Model;
@@ -9,46 +10,39 @@ namespace eVendas.Sales.Service
     public class SaleService : GenericService<Sale>, ISaleService
     {
         private readonly IGenericRepository<Sale> _repository;
-        private readonly IProductSaleRepository _productSaleRepository;
         private readonly IUpdateProduct _updateProduct;
         private readonly IMessageHandler _messageHandler;
         private readonly IProductRepository _productRepository;
 
         public SaleService(
-            IGenericRepository<Sale> repository, IMessageHandler messageHandler, 
-            IProductSaleRepository productSaleRepository, IUpdateProduct updateProduct,
+            IGenericRepository<Sale> repository, IMessageHandler messageHandler, IUpdateProduct updateProduct,
             IProductRepository productRepository) : base(repository)
         {
             _repository = repository;
             _messageHandler = messageHandler;
-            _productSaleRepository = productSaleRepository;
             _updateProduct = updateProduct;
             _productRepository = productRepository;
         }
 
-        public new object Create(Sale sale)
+        public new async Task<object> Create(Sale sale)
         {
             var product = _productRepository.GetById(sale.ProductId);
 
-            if (sale.Quantity <= product.Quantity)
-            {
-                if (sale.Equals(null)) return null;
-                sale.CreatedAt = DateTime.Now;
-                sale.UpdatedAt = DateTime.Now;
-                _repository.Create(sale);
-                _updateProduct.UpdateStock(sale);
-                _messageHandler.SendMessageAsync(MessageType.SaleCreated, sale);
-
-                var productSale = new ProductSale {ProductId = sale.ProductId, SaleId = sale.Id};
-                _productSaleRepository.Create(productSale);
+            if (product == null) return new {Message = "Produto não encontrado."};
             
-                return new {Message = "Venda efetuada com sucesso."};
-            }
+            if (sale.Quantity > product.Quantity) return new {Message = "Quantidade indisponível no estoque."};
+            
+            if (sale.Equals(null)) return null;
+            sale.CreatedAt = DateTime.Now;
+            sale.UpdatedAt = DateTime.Now;
+            _repository.Create(sale);
+            _updateProduct.UpdateStock(sale);
+            await _messageHandler.SendMessageAsync(MessageType.SaleCreated, sale);
 
-            return null;
+            return new {Message = "Venda efetuada com sucesso."};
         }
 
-        public new object Update(int id, Sale sale)
+        public new async Task<object> Update(int id, Sale sale)
         {
             if (id <= 0 || _repository.GetById(id) == null) return null;
 
@@ -65,7 +59,7 @@ namespace eVendas.Sales.Service
             sale.Id = id;
 
             _repository.Update(id, sale);
-            _messageHandler.SendMessageAsync(MessageType.SaleUpdated, sale, updatedSale);
+            await _messageHandler.SendMessageAsync(MessageType.SaleUpdated, sale, updatedSale);
 
             if (updatedSale.OldProductId != updatedSale.NewProductId)
             {
@@ -83,25 +77,17 @@ namespace eVendas.Sales.Service
                 _updateProduct.UpdateStock(sale, saleToUpdate);
             }
 
-            var productSale = new ProductSale {ProductId = sale.ProductId, SaleId = sale.Id};
-            _productSaleRepository.Update(productSale.ProductId, productSale.SaleId, productSale);
-            
             return new {Message = "Venda alterada com sucesso."};
         }
 
-        public new object Delete(int id)
+        public new async Task<object> Delete(int id)
         {
             if (id <= 0 || _repository.GetById(id) == null) return null;
             var saleToDelete = _repository.GetById(id);
             
             if (saleToDelete == null) return null;
             _repository.Delete(id);
-            _messageHandler.SendMessageAsync(MessageType.SaleCancelled, saleToDelete);
-            
-            var productSale = new ProductSale();
-            productSale.ProductId = saleToDelete.ProductId;
-            productSale.SaleId = saleToDelete.Id;
-            _productSaleRepository.Delete(productSale.ProductId, productSale.SaleId);
+            await _messageHandler.SendMessageAsync(MessageType.SaleCancelled, saleToDelete);
             _updateProduct.CancelSale(saleToDelete);
 
             return new {Message = "Venda cancelada com sucesso."};

@@ -18,7 +18,7 @@ namespace eVendas.Warehouse.Helper
         {
             var messageToSend = _factory.Create(messageType, product);
 
-            var serviceBusClient = new TopicClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=SendOnly;SharedAccessKey=SQvgDluEkyote1s6huIX+J/kUv7XdgiE6PFrmMF+5Ik=", "vendarealizada");
+            var serviceBusClient = new TopicClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=StockSendOnly;SharedAccessKey=Ik8U5SMhpgj5isSgvDXSDmWaa+5OYh+d8aTJTcLnrAI=", "stock-send");
 
             var message = new Message(messageToSend.ToJsonBytes());
             message.ContentType = "application/json";
