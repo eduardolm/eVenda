@@ -17,7 +17,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Mode;" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\eVendas.Sales\eVendas.Sales.csproj" />
+      <ProjectReference Include="..\eVendas.Warehouse\eVendas.Warehouse.csproj" />
     </ItemGroup>
 
 </Project>

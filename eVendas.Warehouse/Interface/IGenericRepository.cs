@@ -4,7 +4,7 @@ using eVendas.Warehouse.Model;
 
 namespace eVendas.Warehouse.Interface
 {
-    public interface IGenericRepository<T> : IDisposable where T : class
+    public interface IGenericRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
         T GetById(int id);

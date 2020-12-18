@@ -56,12 +56,7 @@ namespace eVendas.Warehouse.Repository.GenericRepository
                 _context.SaveChanges();
             }
         }
-        
-        public void Dispose()
-        {
-            _context.Dispose();
-        }
-        
+
         public virtual void DetachLocal(Func<T, bool> predicate)
         {
             var local = _context.Set<T>().Local.Where(predicate).FirstOrDefault();

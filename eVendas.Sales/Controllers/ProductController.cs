@@ -41,9 +41,9 @@ namespace eVendas.Sales.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] ProductDto productDto)
         {
-            var product = _mapper.Map<ProductDto, Product>(productDto);
-            
-            return Ok(_service.Create(_mapper.Map<ProductDto, Product>(productDto)));
+            var response = _service.Create(_mapper.Map<ProductDto, Product>(productDto));
+            if (response != null) return Ok(response);
+            return BadRequest(new {Message = "Erro ao cadastrar o produto."});
         }
 
         [HttpPut("{id:int}")]
