@@ -52,10 +52,5 @@ namespace eVendas.Sales.Service.GenericService
 
             return new {Message = "Produto não encontrado."};
         }
-        
-        // public void Dispose()
-        // {
-        //     _repository.Dispose();
-        // }
     }
 }

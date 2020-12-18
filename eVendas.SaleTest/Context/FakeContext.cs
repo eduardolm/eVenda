@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using eVendas.Sales.Context;
+using eVendas.Sales.Interface;
 using eVendas.Sales.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -66,34 +68,31 @@ namespace eVendas.SaleTest.Context
             return configuration;
         }
         
-        // public Mock<IUserService> FakeUserService()
+        // public Mock<ISaleService> FakeUserService()
         // {
-        //     var service = new Mock<IUserService>();
-        //     var userList = GetFakeData<User>();
+        //     var service = new Mock<ISaleService>();
+        //     var saleList = GetFakeData<Sale>();
         //
         //     service.Setup(x => x.GetAll())
-        //         .Returns(() => userList.ToList());
+        //         .Returns(() => saleList.ToList());
         //
         //     service.Setup(x => x.GetById(It.IsAny<int>())).
-        //         Returns((int id) => GetFakeData<User>().FirstOrDefault(x => x.Id == id));
+        //         Returns((int id) => GetFakeData<Sale>().FirstOrDefault(x => x.Id == id));
         //
-        //     service.Setup(x => x.Create(It.IsAny<User>())).
-        //         Returns((User user) => {
+        //     service.Setup(x => x.Create(It.IsAny<Sale>())).
+        //         ReturnsAsync((Task<object> sale) => {
         //
-        //                 if (user.Id == 0)
-        //                     user.Id = 999;
-        //             
-        //                 return user;
+        //             return sale;
         //         });
         //
-        //     service.Setup(x => x.Update(It.IsAny<User>()))
-        //         .Returns((User user) => user);
+        //     service.Setup(x => x.Update(It.IsAny<int>(),It.IsAny<Sale>()))
+        //         .ReturnsAsync((Task<object> sale) => sale);
         //
         //     service.Setup(x => x.Delete(It.IsAny<int>()))
-        //         .Returns((int id) =>
+        //         .ReturnsAsync((int id) =>
         //         {
-        //             userList.Remove(userList[userList.FindIndex(x => x.Id == id)]);
-        //             return userList;
+        //             saleList.Remove(saleList[saleList.FindIndex(x => x.Id == id)]);
+        //             return Task.FromResult<object>(Task.Yield());
         //         });
         //
         //     return service;

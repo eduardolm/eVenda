@@ -76,7 +76,7 @@ namespace eVendas.Sales.Service
 
         public new async Task<object> Delete(int id)
         {
-            if (id <= 0 || _repository.GetById(id) == null) return new {Message = "Venda não encontrada"};
+            if (id <= 0 || _repository.GetById(id) == null) return new {Message = "Venda não encontrada."};
             var saleToDelete = _repository.GetById(id);
             var updatedSale = new UpdatedSale(
                 saleToDelete.ProductId, 

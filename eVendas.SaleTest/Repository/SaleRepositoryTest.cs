@@ -11,7 +11,7 @@ namespace eVendas.SaleTest.Repository
     public class SaleRepositoryTest
     {
         [Fact]
-        public void Test_GetAll_Products_Sale()
+        public void Test_GetAll_Sale()
         {
             var fakeContext = new FakeContext("GetAll_Sale");
             fakeContext.FillWith<Sale>();
@@ -32,7 +32,7 @@ namespace eVendas.SaleTest.Repository
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        public void Test_GetById__Sale(int id)
+        public void Test_GetById_Sale(int id)
         {
             var fakeContext = new FakeContext("GetById_Sale");
             fakeContext.FillWith<Sale>();
