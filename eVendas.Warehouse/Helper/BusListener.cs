@@ -5,6 +5,7 @@ using eVendas.Warehouse.Interface;
 using eVendas.Warehouse.Model;
 using eVendas.Warehouse.Model.MessageFactoryModel;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -18,22 +19,26 @@ namespace eVendas.Warehouse.Helper
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private IProductService _productService;
         private IUpdateProduct _updateProduct;
+        private string _BusListenerConnectionString;
+        private IConfiguration Configuration { get; }
 
-        public BusListener(ILoggerFactory loggerFactory, IServiceScopeFactory serviceScopeFactory)
+        public BusListener(ILoggerFactory loggerFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _logger = loggerFactory.CreateLogger<BusListener>();
+            Configuration = configuration;
         }
         
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            _BusListenerConnectionString = Configuration["ListenetConnectionString"];
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 _productService = scope.ServiceProvider.GetService<IProductService>();
                 _updateProduct = scope.ServiceProvider.GetService<IUpdateProduct>();
                 
                 _logger.LogDebug($"BusListener starting; Registering message handler.");
-                _subscriptionClient = new SubscriptionClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=StockReceiveOnly;SharedAccessKey=WxUBzyLeZCmEMih9p58QgH4FSXjVeOgRV1VVjuGvGZk=", "sale-send", "Sale-Message");
+                _subscriptionClient = new SubscriptionClient(_BusListenerConnectionString, "sale-send", "Sale-Message");
             
                 var messageHandlerOptions = new MessageHandlerOptions(e => {
                     ProcessError(e.Exception);

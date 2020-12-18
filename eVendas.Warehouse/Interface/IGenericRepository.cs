@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using eVendas.Warehouse.Model;
+﻿using System.Collections.Generic;
 
 namespace eVendas.Warehouse.Interface
 {

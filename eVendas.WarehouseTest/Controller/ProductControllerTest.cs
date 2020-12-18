@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.Configuration;
-using AutoMapper.Mappers;
 using eVendas.Warehouse.Context;
 using eVendas.Warehouse.Controller;
 using eVendas.Warehouse.Dto;

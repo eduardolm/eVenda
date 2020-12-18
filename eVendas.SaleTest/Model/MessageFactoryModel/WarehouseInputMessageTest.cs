@@ -1,8 +1,7 @@
 ﻿using System;
+using eVendas.Sales.Enum;
 using eVendas.Sales.Model;
 using eVendas.Sales.Model.MessageFactoryModel;
-using eVendas.Sales.Enum;
-using Moq;
 using Xunit;
 
 namespace eVendas.SaleTest.Model.MessageFactoryModel

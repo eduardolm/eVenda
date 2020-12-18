@@ -8,7 +8,6 @@ using eVendas.Warehouse.Service;
 using eVendas.Warehouse.Validator;
 using eVendas.WarehouseTest.Context;
 using FluentValidation.TestHelper;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 

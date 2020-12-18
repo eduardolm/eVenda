@@ -1,5 +1,4 @@
-﻿using System;
-using eVendas.Warehouse.Enum;
+﻿using eVendas.Warehouse.Enum;
 using eVendas.Warehouse.Model;
 using eVendas.Warehouse.Model.MessageFactoryModel;
 

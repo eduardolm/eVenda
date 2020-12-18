@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using eVendas.Sales.Context;
+﻿using eVendas.Sales.Context;
 using eVendas.Sales.Enum;
 using eVendas.Sales.Model;
 using eVendas.Sales.Model.MessageFactoryModel;

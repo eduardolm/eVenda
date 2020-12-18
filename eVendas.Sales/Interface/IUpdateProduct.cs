@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using eVendas.Sales.Model;
+﻿using eVendas.Sales.Model;
 
 namespace eVendas.Sales.Interface
 {
