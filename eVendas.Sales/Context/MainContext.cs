@@ -22,10 +22,7 @@ namespace eVendas.Sales.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProductMapConfig());
-            
-            modelBuilder.Entity<Sale>()
-                .Property(x => x.Total)
-                .HasColumnType("decimal(6,2");
+            modelBuilder.ApplyConfiguration(new SaleMapConfig());
 
             base.OnModelCreating(modelBuilder);
         }
