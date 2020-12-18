@@ -1,8 +1,6 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using eVendas.Sales.Enum;
 using eVendas.Sales.Model;
-using Microsoft.Azure.ServiceBus;
 
 namespace eVendas.Sales.Interface
 {

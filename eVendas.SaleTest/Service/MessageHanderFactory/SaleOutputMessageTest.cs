@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using eVendas.Sales.Context;
+﻿using eVendas.Sales.Context;
 using eVendas.Sales.Enum;
 using eVendas.Sales.Model;
 using eVendas.Sales.Model.MessageFactoryModel;
@@ -20,10 +18,10 @@ namespace eVendas.SaleTest.Service.MessageHanderFactory
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        public void Test_Create_SaleOutputMessage(int id)
+        public void Test_Create_SaleOutputMessage_Sale(int id)
         {
             var msg = new MessageFactory();
-            var fakeContext = new FakeContext("Generic_Delete_Product_NotFound_Service");
+            var fakeContext = new FakeContext("Create_SaleOutputMessage_Sale");
             fakeContext.FillWithAll();
 
             using (var context = new MainContext(fakeContext.FakeOptions, fakeContext.FakeConfiguration().Object))

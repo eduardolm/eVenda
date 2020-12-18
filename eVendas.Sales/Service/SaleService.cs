@@ -45,7 +45,7 @@ namespace eVendas.Sales.Service
 
         public new async Task<object> Update(int id, Sale sale)
         {
-            if (id <= 0 || _repository.GetById(id) == null) return new {Message = "Produto não encontrado."};
+            if (id <= 0 || _repository.GetById(id) == null) return null;
 
             var product = _productRepository.GetById(sale.ProductId);
             var saleToUpdate = _repository.GetById(id);
@@ -76,7 +76,7 @@ namespace eVendas.Sales.Service
 
         public new async Task<object> Delete(int id)
         {
-            if (id <= 0 || _repository.GetById(id) == null) return new {Message = "Venda não encontrada."};
+            if (id <= 0 || _repository.GetById(id) == null) return null;
             var saleToDelete = _repository.GetById(id);
             var updatedSale = new UpdatedSale(
                 saleToDelete.ProductId, 

@@ -5,6 +5,7 @@ using eVendas.Sales.Interface;
 using eVendas.Sales.Model;
 using eVendas.Sales.Model.MessageFactoryModel;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -17,21 +18,26 @@ namespace eVendas.Sales.Helper
         private SubscriptionClient _subscriptionClient;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private IProductService _productService;
+        private string _busListenerConnectionString;
+        private IConfiguration Configuration { get; }
 
-        public BusListener(ILoggerFactory loggerFactory, IServiceScopeFactory serviceScopeFactory)
+        public BusListener(ILoggerFactory loggerFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _logger = loggerFactory.CreateLogger<BusListener>();
+            Configuration = configuration;
         }
         
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            _busListenerConnectionString = Configuration["ListenerConnectionString"];
+            
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 _productService = scope.ServiceProvider.GetService<IProductService>();
                 
                 _logger.LogDebug($"BusListener starting; Registering message handler.");
-                _subscriptionClient = new SubscriptionClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=SaleReceiveOnly;SharedAccessKey=h1pA6PHiq5Vs+F9peE0YQ6dlTdAiznFgw2XAqrirzxs=", "stock-send", "Stock_Message");
+                _subscriptionClient = new SubscriptionClient(_busListenerConnectionString, "stock-send", "Stock_Message");
             
                 var messageHandlerOptions = new MessageHandlerOptions(e => {
                     ProcessError(e.Exception);

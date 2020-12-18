@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using eVendas.Sales.Context;
-using eVendas.Sales.Interface;
 using eVendas.Sales.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -67,35 +65,5 @@ namespace eVendas.SaleTest.Context
             configuration.Setup(x => x.GetSection(It.IsAny<String>())).Returns(new Mock<IConfigurationSection>().Object);
             return configuration;
         }
-        
-        // public Mock<ISaleService> FakeUserService()
-        // {
-        //     var service = new Mock<ISaleService>();
-        //     var saleList = GetFakeData<Sale>();
-        //
-        //     service.Setup(x => x.GetAll())
-        //         .Returns(() => saleList.ToList());
-        //
-        //     service.Setup(x => x.GetById(It.IsAny<int>())).
-        //         Returns((int id) => GetFakeData<Sale>().FirstOrDefault(x => x.Id == id));
-        //
-        //     service.Setup(x => x.Create(It.IsAny<Sale>())).
-        //         ReturnsAsync((Task<object> sale) => {
-        //
-        //             return sale;
-        //         });
-        //
-        //     service.Setup(x => x.Update(It.IsAny<int>(),It.IsAny<Sale>()))
-        //         .ReturnsAsync((Task<object> sale) => sale);
-        //
-        //     service.Setup(x => x.Delete(It.IsAny<int>()))
-        //         .ReturnsAsync((int id) =>
-        //         {
-        //             saleList.Remove(saleList[saleList.FindIndex(x => x.Id == id)]);
-        //             return Task.FromResult<object>(Task.Yield());
-        //         });
-        //
-        //     return service;
-        // }
     }
 }

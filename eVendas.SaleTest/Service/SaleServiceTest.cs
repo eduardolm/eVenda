@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using eVendas.Sales.Context;
 using eVendas.Sales.Enum;
-using eVendas.Sales.Helper;
 using eVendas.Sales.Interface;
 using eVendas.Sales.Model;
 using eVendas.Sales.Repository;
@@ -270,8 +267,7 @@ namespace eVendas.SaleTest.Service
                 var service = new SaleService(repository, messageMock.Object, updateMock.Object, productRepository);
                 var response = await service.Delete(6);
                 
-                Assert.Equal("{ Message = Venda não encontrada. }", response.ToString());
-                
+                Assert.Null(response);
             }
         }
         

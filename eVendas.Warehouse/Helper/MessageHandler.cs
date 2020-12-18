@@ -4,21 +4,26 @@ using eVendas.Warehouse.Enum;
 using eVendas.Warehouse.Interface;
 using eVendas.Warehouse.Model;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Configuration;
 
 namespace eVendas.Warehouse.Helper
 {
     public class MessageHandler : IMessageHandler
     {
         private readonly IMessageFactory _factory;
-        public MessageHandler(IMessageFactory factory)
+        private IConfiguration Configuration { get; }
+        private string _connectionString;
+        public MessageHandler(IMessageFactory factory, IConfiguration configuration)
         {
             _factory = factory;
+            Configuration = configuration;
         }
         public Task SendMessageAsync(MessageType messageType, Product product)
         {
+            _connectionString = Configuration["MessageConnectionString"];
             var messageToSend = _factory.Create(messageType, product);
 
-            var serviceBusClient = new TopicClient("Endpoint=sb://evenda-service-bus.servicebus.windows.net/;SharedAccessKeyName=StockSendOnly;SharedAccessKey=Ik8U5SMhpgj5isSgvDXSDmWaa+5OYh+d8aTJTcLnrAI=", "stock-send");
+            var serviceBusClient = new TopicClient(_connectionString, "stock-send");
 
             var message = new Message(messageToSend.ToJsonBytes());
             message.ContentType = "application/json";
