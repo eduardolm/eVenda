@@ -2,6 +2,7 @@
 ![License](/img/license.svg)
 ![Coverage](/img/coverage.svg)
 ![Version](/img/version.svg)
+
 Projeto de serviços distribuídos, desenvovido durante Aceleração Avanade / Digital Innovation One.
 Nesse projeto, foram criadas duas APIs, chamadas respectivamente de Warehouse e Sale.
 
